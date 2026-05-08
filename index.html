@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Custom Bingo Generator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="container">
+    <h1>🎯 Custom Bingo Generator</h1>
+
+    <textarea
+      id="phrases"
+      placeholder="Enter one bingo phrase per line..."
+    ></textarea>
+
+    <div class="controls">
+      <button onclick="generateBoard()">Generate Board</button>
+      <button onclick="resetBoard()">Reset</button>
+    </div>
+
+    <div id="board" class="board"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
