@@ -63,7 +63,7 @@ const bingoEntries = [
   {
     type: "image",
     src: "assets/reaction.jpg"
-      label: "Funny Sound"
+    label: "Funny Sound"
   },
 
   {
