@@ -21,6 +21,48 @@ h1 {
   text-align: center;
 }
 
+.player-section {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.player-section input {
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+  width: 220px;
+}
+
+.leaderboard {
+  background: rgba(255,255,255,0.05);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.leaderboard h2 {
+  text-align: center;
+  margin-top: 0;
+}
+
+.leaderboard-entry {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.rank {
+  font-weight: bold;
+  color: gold;
+}
+
 .top-controls {
   display: flex;
   gap: 10px;
