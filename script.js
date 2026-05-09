@@ -1,10 +1,16 @@
 const board = document.getElementById("board");
 const calledList = document.getElementById("called-list");
 const calledNumberDisplay = document.getElementById("called-number");
+const machineBall = document.getElementById("machine-ball");
 const winMessage = document.getElementById("win-message");
+const scoreDisplay = document.getElementById("score");
 
 let calledNumbers = [];
 let availableNumbers = [];
+let hasWon = false;
+
+let wins = localStorage.getItem("bingoWins") || 0;
+scoreDisplay.textContent = wins;
 
 function generateRange(start, end) {
   return Array.from(
@@ -22,8 +28,10 @@ function createColumn(start, end) {
 }
 
 function generateBoard() {
+
   board.innerHTML = "";
   winMessage.textContent = "";
+  hasWon = false;
 
   const columns = [
     createColumn(1, 15),
@@ -36,6 +44,7 @@ function generateBoard() {
   const card = [];
 
   for (let row = 0; row < 5; row++) {
+
     for (let col = 0; col < 5; col++) {
 
       let value = columns[col][row];
@@ -49,6 +58,7 @@ function generateBoard() {
   }
 
   card.forEach((value) => {
+
     const cell = document.createElement("div");
 
     cell.classList.add("cell");
@@ -60,10 +70,12 @@ function generateBoard() {
     cell.textContent = value;
 
     cell.addEventListener("click", () => {
+
       if (value !== "FREE") {
         cell.classList.toggle("marked");
-        checkWin();
       }
+
+      checkWin();
     });
 
     board.appendChild(cell);
@@ -71,10 +83,25 @@ function generateBoard() {
 }
 
 function setupNumbers() {
+
   availableNumbers = generateRange(1, 75);
   calledNumbers = [];
+
   calledList.innerHTML = "";
+
   calledNumberDisplay.textContent = "--";
+  machineBall.textContent = "--";
+}
+
+function animateBall(number) {
+
+  machineBall.classList.remove("spin");
+
+  void machineBall.offsetWidth;
+
+  machineBall.classList.add("spin");
+
+  machineBall.textContent = number;
 }
 
 function drawNumber() {
@@ -94,8 +121,12 @@ function drawNumber() {
 
   calledNumberDisplay.textContent = number;
 
+  animateBall(number);
+
   const ball = document.createElement("div");
+
   ball.classList.add("called-ball");
+
   ball.textContent = number;
 
   calledList.prepend(ball);
@@ -104,6 +135,7 @@ function drawNumber() {
 }
 
 function autoMark(number) {
+
   document.querySelectorAll(".cell").forEach(cell => {
 
     if (cell.textContent == number) {
@@ -116,6 +148,8 @@ function autoMark(number) {
 
 function checkWin() {
 
+  if (hasWon) return;
+
   const cells = [...document.querySelectorAll(".cell")];
 
   const grid = [];
@@ -127,39 +161,55 @@ function checkWin() {
   const isMarked = (r, c) =>
     grid[r][c].classList.contains("marked");
 
-  // Rows
   for (let r = 0; r < 5; r++) {
+
     if ([0,1,2,3,4].every(c => isMarked(r, c))) {
       return showWin();
     }
   }
 
-  // Columns
   for (let c = 0; c < 5; c++) {
+
     if ([0,1,2,3,4].every(r => isMarked(r, c))) {
       return showWin();
     }
   }
 
-  // Diagonal 1
   if ([0,1,2,3,4].every(i => isMarked(i, i))) {
     return showWin();
   }
 
-  // Diagonal 2
   if ([0,1,2,3,4].every(i => isMarked(i, 4 - i))) {
     return showWin();
   }
 }
 
 function showWin() {
+
+  hasWon = true;
+
   winMessage.textContent = "🎉 BINGO! 🎉";
+
+  wins++;
+
+  localStorage.setItem("bingoWins", wins);
+
+  scoreDisplay.textContent = wins;
+
+  confetti({
+    particleCount: 300,
+    spread: 120,
+    origin: { y: 0.6 }
+  });
 }
 
 function resetGame() {
+
   setupNumbers();
+
   generateBoard();
 }
 
 setupNumbers();
+
 generateBoard();
