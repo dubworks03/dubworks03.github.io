@@ -3,13 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Martin Mega Bingo</title>
+  <title>Animated Bingo Game</title>
+
   <link rel="stylesheet" href="style.css" />
+
+  <!-- Confetti Library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 </head>
 <body>
 
   <div class="container">
-    <h1>Martin Mega Bingo</h1>
+
+    <h1>🎯 Animated Bingo Game</h1>
 
     <div class="top-controls">
       <button onclick="generateBoard()">New Card</button>
@@ -17,9 +22,20 @@
       <button onclick="resetGame()">Reset</button>
     </div>
 
+    <div class="machine-wrapper">
+      <div class="machine">
+        <div class="ball" id="machine-ball">--</div>
+      </div>
+    </div>
+
     <div class="current-number">
       Current Number:
       <span id="called-number">--</span>
+    </div>
+
+    <div class="scoreboard">
+      🏆 Wins:
+      <span id="score">0</span>
     </div>
 
     <div class="called-section">
@@ -30,6 +46,7 @@
     <div id="board" class="board"></div>
 
     <div id="win-message" class="win-message"></div>
+
   </div>
 
   <script src="script.js"></script>
