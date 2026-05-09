@@ -1,4 +1,4 @@
-# 🎯 Custom Bingo Generator
+# Martin Mega Bingo
 
 A simple single-player custom bingo card generator.
 
