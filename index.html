@@ -3,33 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
   <title>Martin Mega Bingo</title>
 
+  <!-- Your CSS -->
   <link rel="stylesheet" href="style.css" />
 
   <!-- Confetti Library -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 </head>
+
 <body>
 
   <div class="container">
-    <h1>Martin Mega Bingo</h1>
 
-    <div class="input-section">
-      <textarea id="entries" placeholder="Enter 9 custom bingo entries (one per line)..."></textarea>
+    <h1>🎯 Martin Mega Bingo</h1>
 
-      <button id="generateBtn">
-        Generate Board
-      </button>
-    </div>
-
+    <!-- Bingo Grid -->
     <div id="bingoBoard" class="board"></div>
 
+    <!-- Win Text -->
     <div id="winMessage" class="win-message hidden">
       🎉 BINGO! 🎉
     </div>
+
   </div>
 
+  <!-- Your JS -->
   <script src="script.js"></script>
+
 </body>
 </html>
