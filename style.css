@@ -4,7 +4,7 @@
 
 body {
   margin: 0;
-  background: #121212;
+  background: linear-gradient(135deg, #101010, #1d1d1d);
   color: white;
   font-family: Arial, sans-serif;
   display: flex;
@@ -24,8 +24,8 @@ h1 {
 .top-controls {
   display: flex;
   gap: 10px;
-  margin-bottom: 20px;
   justify-content: center;
+  margin-bottom: 20px;
   flex-wrap: wrap;
 }
 
@@ -35,18 +35,70 @@ button {
   border-radius: 10px;
   background: #4caf50;
   color: white;
-  cursor: pointer;
   font-size: 16px;
+  cursor: pointer;
 }
 
 button:hover {
   opacity: 0.9;
 }
 
-.current-number {
+.machine-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.machine {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #444, #111);
+  border: 8px solid #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.ball {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: #ff9800;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  font-weight: bold;
+  color: black;
+  animation-duration: 0.5s;
+}
+
+.spin {
+  animation: spinBall 0.5s ease;
+}
+
+@keyframes spinBall {
+  0% {
+    transform: rotate(0deg) scale(0.7);
+  }
+
+  50% {
+    transform: rotate(180deg) scale(1.2);
+  }
+
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+.current-number,
+.scoreboard {
   text-align: center;
   font-size: 24px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 #called-number {
@@ -95,7 +147,6 @@ button:hover {
 
 .marked {
   background: #4caf50;
-  color: white;
 }
 
 .free {
@@ -103,9 +154,22 @@ button:hover {
 }
 
 .win-message {
-  margin-top: 20px;
   text-align: center;
-  font-size: 28px;
+  font-size: 36px;
   font-weight: bold;
   color: gold;
+  margin-top: 20px;
+}
+
+@media (max-width: 700px) {
+
+  .cell {
+    font-size: 18px;
+  }
+
+  .ball {
+    width: 70px;
+    height: 70px;
+    font-size: 24px;
+  }
 }
