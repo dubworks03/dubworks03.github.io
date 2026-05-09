@@ -1,33 +1,45 @@
-# 🎯 Bingo Game
+# Martin Mega Bingo 🎉
 
-A browser-based Bingo game built with HTML, CSS, and JavaScript.
+A customizable dark-mode 3x3 Bingo game with confetti celebration effects.
 
 ## Features
 
-- Randomized Bingo card
-- Standard BINGO number ranges
-- Auto-marking called numbers
-- Win detection
-- FREE center space
-- Mobile-friendly
-- No backend required
+- 3x3 Bingo grid
+- Fully customizable entries
+- Dark modern UI
+- Winning animations
+- Confetti celebration
+- Mobile responsive
+- Pure HTML/CSS/JavaScript
+- No frameworks required
+
+---
+
+## How to Use
+
+1. Open `index.html`
+2. Enter your custom bingo entries
+3. Press **Generate Board**
+4. Click tiles during the game
+5. Get 3 in a row to win 🎉
+
+---
+
+## Customize Entries
+
+You can add:
+- Names
+- Tasks
+- Challenges
+- Inside jokes
+- Stream events
+- Anything you want
+
+---
 
 ## Run Locally
 
-Open `index.html` in your browser.
+Simply open:
 
-## Deploy with GitHub Pages
-
-1. Upload files to GitHub
-2. Go to:
-   Settings → Pages
-3. Select:
-   - Branch: main
-   - Folder: /root
-4. Save
-
-Your game will be live online.
-
-## License
-
-MIT
+```bash
+index.html
