@@ -1,9 +1,15 @@
+
+---
+
+# `index.html`
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Animated Bingo Game</title>
+  <title>Martin Mega Bingo</title>
 
   <link rel="stylesheet" href="style.css" />
 
@@ -13,62 +19,21 @@
 <body>
 
   <div class="container">
+    <h1>🎯 Martin Mega Bingo</h1>
 
-    <h1>🎯 Animated Bingo Game</h1>
+    <div class="input-section">
+      <textarea id="entries" placeholder="Enter 9 custom bingo entries (one per line)..."></textarea>
 
-    <div class="top-controls">
-      <button onclick="generateBoard()">New Card</button>
-      <button onclick="drawNumber()">Draw Number</button>
-      <button onclick="resetGame()">Reset</button>
+      <button id="generateBtn">
+        Generate Board
+      </button>
     </div>
 
-    <div class="player-section">
+    <div id="bingoBoard" class="board"></div>
 
-  <input
-    type="text"
-    id="player-name"
-    placeholder="Enter your name"
-    maxlength="20"
-  />
-
-  <button onclick="savePlayerName()">
-    Save Name
-  </button>
-
-</div>
-
-<div class="leaderboard">
-
-  <h2>🏆 Leaderboard</h2>
-
-  <div id="leaderboard-list"></div>
-
-</div>
-
-<div class="machine">
-  <div class="machine-glow"></div>
-  <div class="ball" id="machine-ball">--</div>
-</div>
-
-    <div class="current-number">
-      Current Number:
-      <span id="called-number">--</span>
+    <div id="winMessage" class="win-message hidden">
+      🎉 BINGO! 🎉
     </div>
-
-    <div class="scoreboard">
-      🏆 Wins:
-      <span id="score">0</span>
-    </div>
-
-    <div class="called-section">
-      <h2>Called Numbers</h2>
-      <div id="called-list" class="called-list"></div>
-    </div>
-
-    <div id="board" class="board"></div>
-
-    <div id="win-message" class="win-message"></div>
-
   </div>
 
   <script src="script.js"></script>
