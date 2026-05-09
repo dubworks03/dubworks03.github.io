@@ -8,6 +8,11 @@ const scoreDisplay = document.getElementById("score");
 let calledNumbers = [];
 let availableNumbers = [];
 let hasWon = false;
+let playerName =
+  localStorage.getItem("bingoPlayerName") || "Player";
+
+let leaderboard =
+  JSON.parse(localStorage.getItem("bingoLeaderboard")) || [];
 
 let wins = localStorage.getItem("bingoWins") || 0;
 scoreDisplay.textContent = wins;
