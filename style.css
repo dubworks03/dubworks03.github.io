@@ -81,16 +81,25 @@ button:hover {
 }
 
 @keyframes spinBall {
+
   0% {
-    transform: rotate(0deg) scale(0.7);
+    transform: scale(0.4) rotate(0deg);
+  }
+
+  25% {
+    transform: scale(1.2) rotate(180deg);
   }
 
   50% {
-    transform: rotate(180deg) scale(1.2);
+    transform: scale(0.8) rotate(360deg);
+  }
+
+  75% {
+    transform: scale(1.1) rotate(540deg);
   }
 
   100% {
-    transform: rotate(360deg) scale(1);
+    transform: scale(1) rotate(720deg);
   }
 }
 
