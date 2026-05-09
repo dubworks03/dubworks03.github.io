@@ -16,6 +16,7 @@ EXAMPLES:
 {
   type: "text",
   content: "Martin screams"
+  label: "Funny Sound"
 }
 
 {
@@ -26,7 +27,6 @@ EXAMPLES:
 {
   type: "audio",
   src: "assets/funny.mp3",
-  label: "Play Sound"
 }
 
 ========================================
@@ -63,6 +63,7 @@ const bingoEntries = [
   {
     type: "image",
     src: "assets/reaction.jpg"
+      label: "Funny Sound"
   },
 
   {
