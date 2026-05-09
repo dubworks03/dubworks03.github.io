@@ -97,11 +97,15 @@ function animateBall(number) {
 
   machineBall.classList.remove("spin");
 
-  void machineBall.offsetWidth;
+  machineBall.style.animation = "none";
 
-  machineBall.classList.add("spin");
+  machineBall.offsetHeight;
+
+  machineBall.style.animation = null;
 
   machineBall.textContent = number;
+
+  machineBall.classList.add("spin");
 }
 
 function drawNumber() {
