@@ -139,6 +139,7 @@ function generateBoard() {
   });
 }
 
+
 function setupNumbers() {
 
   availableNumbers = generateRange(1, 75);
@@ -251,11 +252,33 @@ function showWin() {
 
   winMessage.textContent = "🎉 BINGO! 🎉";
 
-  wins++;
+wins++;
 
-  localStorage.setItem("bingoWins", wins);
+localStorage.setItem("bingoWins", wins);
 
-  scoreDisplay.textContent = wins;
+scoreDisplay.textContent = wins;
+
+const existingPlayer =
+  leaderboard.find(p => p.name === playerName);
+
+if (existingPlayer) {
+
+  existingPlayer.score++;
+
+} else {
+
+  leaderboard.push({
+    name: playerName,
+    score: 1
+  });
+}
+
+localStorage.setItem(
+  "bingoLeaderboard",
+  JSON.stringify(leaderboard)
+);
+
+renderLeaderboard();
 
   confetti({
     particleCount: 300,
@@ -270,6 +293,11 @@ function resetGame() {
 
   generateBoard();
 }
+
+document.getElementById("player-name").value =
+  playerName;
+
+renderLeaderboard();
 
 setupNumbers();
 
