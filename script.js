@@ -17,6 +17,58 @@ let leaderboard =
 let wins = localStorage.getItem("bingoWins") || 0;
 scoreDisplay.textContent = wins;
 
+function savePlayerName() {
+
+  const input =
+    document.getElementById("player-name");
+
+  const name = input.value.trim();
+
+  if (!name) {
+    alert("Please enter a name.");
+    return;
+  }
+
+  playerName = name;
+
+  localStorage.setItem(
+    "bingoPlayerName",
+    playerName
+  );
+
+  alert("Name saved!");
+}
+
+function renderLeaderboard() {
+
+  const leaderboardList =
+    document.getElementById("leaderboard-list");
+
+  leaderboardList.innerHTML = "";
+
+  leaderboard
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 10)
+    .forEach((entry, index) => {
+
+      const row = document.createElement("div");
+
+      row.classList.add("leaderboard-entry");
+
+      row.innerHTML = `
+        <span class="rank">
+          #${index + 1} ${entry.name}
+        </span>
+
+        <span>
+          ${entry.score} wins
+        </span>
+      `;
+
+      leaderboardList.appendChild(row);
+    });
+}
+
 function generateRange(start, end) {
   return Array.from(
     { length: end - start + 1 },
