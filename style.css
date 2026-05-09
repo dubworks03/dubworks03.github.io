@@ -4,9 +4,9 @@
 
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
   background: #121212;
   color: white;
+  font-family: Arial, sans-serif;
   display: flex;
   justify-content: center;
   padding: 20px;
@@ -21,34 +21,53 @@ h1 {
   text-align: center;
 }
 
-textarea {
-  width: 100%;
-  height: 180px;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  margin-bottom: 16px;
-  font-size: 16px;
-}
-
-.controls {
+.top-controls {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 button {
-  padding: 12px 20px;
+  padding: 12px 18px;
   border: none;
   border-radius: 10px;
-  cursor: pointer;
-  font-size: 16px;
   background: #4caf50;
   color: white;
+  cursor: pointer;
+  font-size: 16px;
 }
 
 button:hover {
   opacity: 0.9;
+}
+
+.current-number {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+#called-number {
+  color: #4caf50;
+  font-weight: bold;
+}
+
+.called-section {
+  margin-bottom: 20px;
+}
+
+.called-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.called-ball {
+  background: #1f1f1f;
+  padding: 8px 12px;
+  border-radius: 8px;
 }
 
 .board {
@@ -62,26 +81,31 @@ button:hover {
   background: #1f1f1f;
   border-radius: 12px;
   display: flex;
-  align-items: center;
   justify-content: center;
-  text-align: center;
-  padding: 10px;
+  align-items: center;
+  font-size: 24px;
   cursor: pointer;
-  user-select: none;
   transition: 0.2s;
-  font-size: 14px;
+  user-select: none;
 }
 
 .cell:hover {
-  transform: scale(1.02);
+  transform: scale(1.03);
 }
 
 .marked {
   background: #4caf50;
   color: white;
-  text-decoration: line-through;
 }
 
 .free {
   background: #2196f3;
+}
+
+.win-message {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  color: gold;
 }
