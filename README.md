@@ -1,33 +1,32 @@
-# Martin Mega Bingo
+# 🎯 Bingo Game
 
-A simple single-player custom bingo card generator.
+A browser-based Bingo game built with HTML, CSS, and JavaScript.
 
 ## Features
 
-- Custom bingo phrases
-- Randomized 5x5 board
-- Free center space
-- Click to mark tiles
-- Mobile friendly
+- Randomized Bingo card
+- Standard BINGO number ranges
+- Auto-marking called numbers
+- Win detection
+- FREE center space
+- Mobile-friendly
 - No backend required
 
 ## Run Locally
 
-Just open `index.html` in your browser.
+Open `index.html` in your browser.
 
-## Deploy on GitHub Pages
+## Deploy with GitHub Pages
 
-1. Push this repo to GitHub
+1. Upload files to GitHub
 2. Go to:
    Settings → Pages
-3. Under "Source":
-   - Select `main`
-   - Select `/root`
+3. Select:
+   - Branch: main
+   - Folder: /root
 4. Save
 
-Your site will be live at:
-
-https://YOURUSERNAME.github.io/custom-bingo/
+Your game will be live online.
 
 ## License
 
