@@ -1,289 +1,261 @@
-const board = document.getElementById("bingoBoard");
-const winMessage = document.getElementById("winMessage");
-
 /*
 ========================================
-CUSTOM BINGO ENTRIES
+MARTIN MEGA BINGO
 ========================================
 
-TYPES:
-- text
-- image
-- audio
+HOW TO CUSTOMIZE:
 
-EXAMPLES:
-
+1. TEXT
 {
-  type: "text",
-  content: "Martin screams"
-  label: "Funny Sound"
+    type: "text",
+    content: "Hello World"
 }
 
+2. IMAGE
+Put image inside:
+assets/
+
+Example:
 {
-  type: "image",
-  src: "assets/meme.png"
+    type: "image",
+    content: "assets/my-image.jpg"
 }
 
+3. AUDIO
+Put audio inside:
+assets/
+
+Example:
 {
-  type: "audio",
-  src: "assets/funny.mp3",
+    type: "audio",
+    content: "assets/my-song.mp3",
+    label: "Play Audio 🔊"
 }
 
 ========================================
 */
 
-const bingoEntries = [
+const bingoItems = [
+    {
+        type: "text",
+        content: "Coffee Break ☕"
+    },
 
-  {
-    type: "text",
-    content: "Martin says 'crazy'"
-  },
+    {
+        type: "image",
+        content: "assets/sample.jpg"
+    },
 
-  {
-    type: "text",
-    content: "Technical difficulties"
-  },
+    {
+        type: "audio",
+        content: "assets/sample.mp3",
+        label: "Play Audio 🔊"
+    },
 
-  {
-    type: "image",
-    src: "assets/martin.png"
-  },
+    {
+        type: "text",
+        content: "Bug Found 🐛"
+    },
 
-  {
-    type: "audio",
-    src: "assets/funny.mp3",
-    label: "Funny Sound"
-  },
+    {
+        type: "text",
+        content: "Deploy Time 🚀"
+    },
 
-  {
-    type: "text",
-    content: "Chat goes wild"
-  },
+    {
+        type: "text",
+        content: "Snack Attack 🍕"
+    },
 
-  {
-    type: "image",
-    src: "assets/reaction.jpg"
-    label: "Funny Sound"
-  },
+    {
+        type: "text",
+        content: "Late Night Coding 🌙"
+    },
 
-  {
-    type: "text",
-    content: "Mentions food"
-  },
+    {
+        type: "text",
+        content: "Team Meeting"
+    },
 
-  {
-    type: "audio",
-    src: "assets/laugh.mp3",
-    label: "Laugh Clip"
-  },
-
-  {
-    type: "text",
-    content: "Unexpected scream"
-  }
-
+    {
+        type: "text",
+        content: "Keyboard Smash ⌨️"
+    }
 ];
 
-let cells = [];
-let hasWon = false;
+const board = document.getElementById("bingo-board");
+const resetBtn = document.getElementById("reset-btn");
+const title = document.getElementById("title");
 
-/*
-========================================
-GENERATE BOARD
-========================================
-*/
+let selectedCells = Array(9).fill(false);
+let gameWon = false;
 
-generateBoard();
+/* ========================================
+CREATE BOARD
+======================================== */
 
-function generateBoard() {
+function createBoard() {
 
-  if (bingoEntries.length < 9) {
-    alert("You need at least 9 bingo entries.");
-    return;
-  }
+    board.innerHTML = "";
 
-  const shuffled = shuffleArray(bingoEntries).slice(0, 9);
+    bingoItems.forEach((item, index) => {
 
-  shuffled.forEach((entry, index) => {
+        const cell = document.createElement("div");
+        cell.classList.add("bingo-cell");
 
-    const cell = document.createElement("div");
+        // TEXT
+        if (item.type === "text") {
 
-    cell.classList.add("cell");
-    cell.dataset.index = index;
+            cell.innerHTML = `
+                <div class="text-content">
+                    ${item.content}
+                </div>
+            `;
+        }
 
-    /*
-    ============================
-    TEXT ENTRY
-    ============================
-    */
+        // IMAGE
+        else if (item.type === "image") {
 
-    if (entry.type === "text") {
+            cell.innerHTML = `
+                <img src="${item.content}" alt="Bingo Image">
+            `;
+        }
 
-      const text = document.createElement("span");
-      text.textContent = entry.content;
+        // AUDIO
+        else if (item.type === "audio") {
 
-      cell.appendChild(text);
-    }
+            cell.innerHTML = `
+                <button class="audio-button">
+                    ${item.label || "Play Audio"}
+                </button>
+            `;
 
-    /*
-    ============================
-    IMAGE ENTRY
-    ============================
-    */
+            const audio = new Audio(item.content);
 
-    if (entry.type === "image") {
+            const button = cell.querySelector("button");
 
-      const img = document.createElement("img");
+            button.addEventListener("click", (event) => {
 
-      img.src = entry.src;
-      img.alt = "Bingo Image";
+                event.stopPropagation();
 
-      img.classList.add("bingo-image");
+                audio.currentTime = 0;
+                audio.play();
+            });
+        }
 
-      cell.appendChild(img);
-    }
+        cell.addEventListener("click", () => {
 
-    /*
-    ============================
-    AUDIO ENTRY
-    ============================
-    */
+            if (gameWon) return;
 
-    if (entry.type === "audio") {
+            selectedCells[index] = !selectedCells[index];
 
-      const audioWrapper = document.createElement("div");
+            cell.classList.toggle("active");
 
-      audioWrapper.classList.add("audio-wrapper");
+            checkWin();
+        });
 
-      const button = document.createElement("button");
-
-      button.classList.add("audio-button");
-      button.textContent = entry.label || "Play Audio";
-
-      const audio = document.createElement("audio");
-
-      audio.src = entry.src;
-
-      button.addEventListener("click", (e) => {
-
-        e.stopPropagation();
-
-        audio.currentTime = 0;
-        audio.play();
-      });
-
-      audioWrapper.appendChild(button);
-      audioWrapper.appendChild(audio);
-
-      cell.appendChild(audioWrapper);
-    }
-
-    /*
-    ============================
-    MARK CELL
-    ============================
-    */
-
-    cell.addEventListener("click", () => {
-
-      cell.classList.toggle("marked");
-
-      checkWin();
+        board.appendChild(cell);
     });
-
-    board.appendChild(cell);
-
-    cells.push(cell);
-  });
 }
 
-/*
-========================================
+/* ========================================
 CHECK WIN
-========================================
-*/
+======================================== */
 
 function checkWin() {
 
-  const winningCombos = [
-    [0,1,2],
-    [3,4,5],
-    [6,7,8],
+    const winPatterns = [
 
-    [0,3,6],
-    [1,4,7],
-    [2,5,8],
+        // Horizontal
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
 
-    [0,4,8],
-    [2,4,6]
-  ];
+        // Vertical
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
 
-  const won = winningCombos.some(combo => {
+        // Diagonal
+        [0, 4, 8],
+        [2, 4, 6]
+    ];
 
-    return combo.every(index => {
-      return cells[index].classList.contains("marked");
-    });
-  });
+    for (const pattern of winPatterns) {
 
-  if (won && !hasWon) {
+        const hasWon = pattern.every(index => selectedCells[index]);
 
-    hasWon = true;
+        if (hasWon) {
 
-    triggerWin();
-  }
+            triggerWin();
+
+            return;
+        }
+    }
 }
 
-/*
-========================================
+/* ========================================
 WIN EFFECT
-========================================
-*/
+======================================== */
 
 function triggerWin() {
 
-  winMessage.classList.remove("hidden");
+    gameWon = true;
 
-  confetti({
-    particleCount: 250,
-    spread: 100,
-    origin: { y: 0.6 }
-  });
+    title.classList.add("win-animation");
 
-  setTimeout(() => {
-
+    // First confetti blast
     confetti({
-      particleCount: 150,
-      angle: 60,
-      spread: 80,
-      origin: { x: 0 }
+        particleCount: 250,
+        spread: 120,
+        origin: { y: 0.6 }
     });
 
-    confetti({
-      particleCount: 150,
-      angle: 120,
-      spread: 80,
-      origin: { x: 1 }
+    // Second blast
+    setTimeout(() => {
+
+        confetti({
+            particleCount: 200,
+            spread: 180
+        });
+
+    }, 500);
+
+    // Third blast
+    setTimeout(() => {
+
+        confetti({
+            particleCount: 150,
+            spread: 360
+        });
+
+    }, 1000);
+
+    setTimeout(() => {
+        alert("🎉 BINGO! YOU WON!");
+    }, 300);
+}
+
+/* ========================================
+RESET GAME
+======================================== */
+
+resetBtn.addEventListener("click", () => {
+
+    selectedCells = Array(9).fill(false);
+
+    gameWon = false;
+
+    title.classList.remove("win-animation");
+
+    document.querySelectorAll(".bingo-cell").forEach(cell => {
+
+        cell.classList.remove("active");
     });
+});
 
-  }, 300);
-}
+/* ========================================
+START GAME
+======================================== */
 
-/*
-========================================
-SHUFFLE
-========================================
-*/
-
-function shuffleArray(array) {
-
-  const copied = [...array];
-
-  for (let i = copied.length - 1; i > 0; i--) {
-
-    const j = Math.floor(Math.random() * (i + 1));
-
-    [copied[i], copied[j]] = [copied[j], copied[i]];
-  }
-
-  return copied;
-}
+createBoard();
