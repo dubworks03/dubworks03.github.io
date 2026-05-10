@@ -52,6 +52,11 @@ const bingoItems = [
         label: "Play Audio 🔊"
     },
 
+        {
+        type: "text",
+        content: "MAMAMIA"
+    },
+
     {
         type: "text",
         content: "Bug Found 🐛"
