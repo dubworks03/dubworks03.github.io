@@ -1,36 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Martin Mega Bingo</title>
 
-  <title>Martin Mega Bingo</title>
+    <link rel="stylesheet" href="style.css" />
 
-  <!-- Your CSS -->
-  <link rel="stylesheet" href="style.css" />
-
-  <!-- Confetti Library -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <!-- Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 </head>
-
 <body>
 
-  <div class="container">
+    <div class="container">
+        <h1 id="title">🎉 Martin Mega Bingo 🎉</h1>
 
-    <h1>🎯 Martin Mega Bingo</h1>
+        <div id="bingo-board" class="bingo-board"></div>
 
-    <!-- Bingo Grid -->
-    <div id="bingoBoard" class="board"></div>
-
-    <!-- Win Text -->
-    <div id="winMessage" class="win-message hidden">
-      🎉 BINGO! 🎉
+        <button id="reset-btn">Reset Game</button>
     </div>
 
-  </div>
-
-  <!-- Your JS -->
-  <script src="script.js"></script>
-
+    <script src="script.js"></script>
 </body>
 </html>
