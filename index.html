@@ -1,25 +1,234 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Martin Mega Bingo</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Media Bingo 3x3</title>
 
-    <link rel="stylesheet" href="style.css" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-    <!-- Confetti -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .board {
+      width: 100%;
+      max-width: 600px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .cell {
+      background: #222;
+      border: 3px solid #444;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: 0.2s;
+      position: relative;
+      aspect-ratio: 1 / 1;
+    }
+
+    .cell:hover {
+      transform: scale(1.03);
+    }
+
+    .cell img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .cell.marked {
+      border-color: lime;
+    }
+
+    .cell.marked::after {
+      content: "✔";
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      font-size: 28px;
+      font-weight: bold;
+      color: lime;
+      text-shadow: 0 0 5px black;
+    }
+
+    .controls {
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 5px;
+    }
+
+    .reset-btn {
+      background: crimson;
+      color: white;
+    }
+
+    .shuffle-btn {
+      background: dodgerblue;
+      color: white;
+    }
+
+    #bingoMessage {
+      margin-top: 20px;
+      font-size: 32px;
+      color: gold;
+      display: none;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1 id="title">🎉 Martin Mega Bingo 🎉</h1>
+  <h1>🎵 Media Bingo 🎵</h1>
 
-        <div id="bingo-board" class="bingo-board"></div>
+  <div class="board" id="board"></div>
 
-        <button id="reset-btn">Reset Game</button>
-    </div>
+  <div class="controls">
+    <button class="shuffle-btn" onclick="shuffleBoard()">Shuffle</button>
+    <button class="reset-btn" onclick="resetBoard()">Reset</button>
+  </div>
 
-    <script src="script.js"></script>
+  <div id="bingoMessage">🎉 BINGO! 🎉</div>
+
+  <script>
+    // HARDCODE YOUR ENTRIES HERE
+    const entries = [
+      {
+        image: "images/cat.jpg",
+        audio: "audio/cat.mp3"
+      },
+      {
+        image: "images/dog.jpg",
+        audio: "audio/dog.mp3"
+      },
+      {
+        image: "images/bird.jpg",
+        audio: "audio/bird.mp3"
+      },
+      {
+        image: "images/cow.jpg",
+        audio: "audio/cow.mp3"
+      },
+      {
+        image: "images/lion.jpg",
+        audio: "audio/lion.mp3"
+      },
+      {
+        image: "images/frog.jpg",
+        audio: "audio/frog.mp3"
+      },
+      {
+        image: "images/horse.jpg",
+        audio: "audio/horse.mp3"
+      },
+      {
+        image: "images/sheep.jpg",
+        audio: "audio/sheep.mp3"
+      },
+      {
+        image: "images/duck.jpg",
+        audio: "audio/duck.mp3"
+      }
+    ];
+
+    const board = document.getElementById("board");
+    const bingoMessage = document.getElementById("bingoMessage");
+
+    function createBoard() {
+      board.innerHTML = "";
+
+      entries.forEach((entry, index) => {
+        const cell = document.createElement("div");
+        cell.classList.add("cell");
+        cell.dataset.index = index;
+
+        const img = document.createElement("img");
+        img.src = entry.image;
+
+        const audio = new Audio(entry.audio);
+
+        cell.appendChild(img);
+
+        cell.addEventListener("click", () => {
+          audio.currentTime = 0;
+          audio.play();
+
+          cell.classList.toggle("marked");
+
+          checkBingo();
+        });
+
+        board.appendChild(cell);
+      });
+    }
+
+    function getMarkedIndexes() {
+      return [...document.querySelectorAll(".cell.marked")]
+        .map(cell => Number(cell.dataset.index));
+    }
+
+    function checkBingo() {
+      const marked = getMarkedIndexes();
+
+      const winPatterns = [
+        [0,1,2],
+        [3,4,5],
+        [6,7,8],
+
+        [0,3,6],
+        [1,4,7],
+        [2,5,8],
+
+        [0,4,8],
+        [2,4,6]
+      ];
+
+      const hasBingo = winPatterns.some(pattern =>
+        pattern.every(index => marked.includes(index))
+      );
+
+      bingoMessage.style.display = hasBingo ? "block" : "none";
+    }
+
+    function resetBoard() {
+      document.querySelectorAll(".cell").forEach(cell => {
+        cell.classList.remove("marked");
+      });
+
+      bingoMessage.style.display = "none";
+    }
+
+    function shuffleBoard() {
+      entries.sort(() => Math.random() - 0.5);
+      resetBoard();
+      createBoard();
+    }
+
+    createBoard();
+  </script>
+
 </body>
 </html>
