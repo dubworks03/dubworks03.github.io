@@ -1,25 +1,446 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Martin Mega Bingo</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Media Bingo 3x3</title>
 
-    <link rel="stylesheet" href="style.css" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-    <!-- Confetti -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .board {
+      width: 100%;
+      max-width: 600px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .cell {
+      background: #222;
+      border: 3px solid #444;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: 0.2s;
+      position: relative;
+      aspect-ratio: 1 / 1;
+    }
+
+    .cell:hover {
+      transform: scale(1.03);
+    }
+
+    .cell img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .cell.marked {
+      border-color: lime;
+    }
+
+    .cell.marked::after {
+      content: "✔";
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      font-size: 28px;
+      font-weight: bold;
+      color: lime;
+      text-shadow: 0 0 5px black;
+    }
+
+    .controls {
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 5px;
+    }
+
+    .reset-btn {
+      background: crimson;
+      color: white;
+    }
+
+    .shuffle-btn {
+      background: dodgerblue;
+      color: white;
+    }
+
+    #bingoMessage {
+      margin-top: 20px;
+      font-size: 32px;
+      color: gold;
+      display: none;
+    }
+
+    /* SCOREBOARD */
+
+    #scoreboard {
+      max-width: 600px;
+      margin: 30px auto;
+      background: #1b1b1b;
+      padding: 20px;
+      border-radius: 12px;
+      border: 2px solid #333;
+    }
+
+    #scoreboard h2 {
+      margin-top: 0;
+    }
+
+    .add-player {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .add-player input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+    }
+
+    #playerList {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .player-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #2a2a2a;
+      margin-bottom: 10px;
+      padding: 12px;
+      border-radius: 8px;
+    }
+
+    .player-rank {
+      font-weight: bold;
+      color: gold;
+    }
+
+    .player-score {
+      font-size: 20px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1 id="title">🎉 Martin Mega Bingo 🎉</h1>
+  <h1>🎵 Media Bingo 🎵</h1>
 
-        <div id="bingo-board" class="bingo-board"></div>
+  <div class="board" id="board"></div>
 
-        <button id="reset-btn">Reset Game</button>
+  <div class="controls">
+    <button class="shuffle-btn" onclick="shuffleBoard()">Shuffle</button>
+    <button class="reset-btn" onclick="resetBoard()">Reset Board</button>
+  </div>
+
+  <div id="bingoMessage">🎉 BINGO! 🎉</div>
+
+  <!-- SCOREBOARD -->
+
+  <div id="scoreboard">
+    <h2>🏆 Scoreboard</h2>
+
+    <div class="add-player">
+      <input type="text" id="playerName" placeholder="Player name">
+      <button onclick="addPlayer()">Add Player</button>
     </div>
 
-    <script src="script.js"></script>
+    <button class="reset-btn" onclick="resetScores()">
+      Reset Scores
+    </button>
+
+    <ul id="playerList"></ul>
+  </div>
+
+  <script>
+
+    // HARDCODE YOUR ENTRIES HERE
+
+    const entries = [
+      {
+        image: "images/cat.png",
+        audio: "audio/cat.mp3"
+      },
+      {
+        image: "images/dog.png",
+        audio: "audio/dog.mp3"
+      },
+      {
+        image: "images/bird.png",
+        audio: "audio/bird.mp3"
+      },
+      {
+        image: "images/cow.png",
+        audio: "audio/cow.mp3"
+      },
+      {
+        image: "images/lion.png",
+        audio: "audio/lion.mp3"
+      },
+      {
+        image: "images/frog.png",
+        audio: "audio/frog.mp3"
+      },
+      {
+        image: "images/horse.png",
+        audio: "audio/horse.mp3"
+      },
+      {
+        image: "images/sheep.png",
+        audio: "audio/sheep.mp3"
+      },
+      {
+        image: "images/duck.png",
+        audio: "audio/duck.mp3"
+      }
+    ];
+
+    const board = document.getElementById("board");
+    const bingoMessage = document.getElementById("bingoMessage");
+
+    // PERSISTENT PLAYERS
+
+    let players =
+      JSON.parse(localStorage.getItem("bingoPlayers")) || [];
+
+    // CREATE BOARD
+
+    function createBoard() {
+
+      board.innerHTML = "";
+
+      entries.forEach((entry, index) => {
+
+        const cell = document.createElement("div");
+
+        cell.classList.add("cell");
+        cell.dataset.index = index;
+
+        const img = document.createElement("img");
+        img.src = entry.image;
+
+        const audio = new Audio(entry.audio);
+
+        cell.appendChild(img);
+
+        cell.addEventListener("click", () => {
+
+          audio.currentTime = 0;
+          audio.play();
+
+          cell.classList.toggle("marked");
+
+          checkBingo();
+
+        });
+
+        board.appendChild(cell);
+
+      });
+    }
+
+    // GET MARKED CELLS
+
+    function getMarkedIndexes() {
+
+      return [...document.querySelectorAll(".cell.marked")]
+        .map(cell => Number(cell.dataset.index));
+
+    }
+
+    // CHECK BINGO
+
+    function checkBingo() {
+
+      const marked = getMarkedIndexes();
+
+      const winPatterns = [
+
+        [0,1,2],
+        [3,4,5],
+        [6,7,8],
+
+        [0,3,6],
+        [1,4,7],
+        [2,5,8],
+
+        [0,4,8],
+        [2,4,6]
+
+      ];
+
+      const hasBingo = winPatterns.some(pattern =>
+        pattern.every(index => marked.includes(index))
+      );
+
+      if (hasBingo) {
+
+        bingoMessage.style.display = "block";
+
+        awardPointToTopPlayer();
+
+      } else {
+
+        bingoMessage.style.display = "none";
+
+      }
+    }
+
+    // RESET BOARD
+
+    function resetBoard() {
+
+      document.querySelectorAll(".cell").forEach(cell => {
+
+        cell.classList.remove("marked");
+
+      });
+
+      bingoMessage.style.display = "none";
+    }
+
+    // SHUFFLE BOARD
+
+    function shuffleBoard() {
+
+      entries.sort(() => Math.random() - 0.5);
+
+      resetBoard();
+
+      createBoard();
+    }
+
+    // SCOREBOARD FUNCTIONS
+
+    function addPlayer() {
+
+      const input =
+        document.getElementById("playerName");
+
+      const name = input.value.trim();
+
+      if (!name) return;
+
+      players.push({
+        name,
+        score: 0
+      });
+
+      input.value = "";
+
+      savePlayers();
+
+      renderPlayers();
+    }
+
+    function awardPointToTopPlayer() {
+
+      if (players.length === 0) return;
+
+      players[0].score += 1;
+
+      sortPlayers();
+
+      savePlayers();
+
+      renderPlayers();
+    }
+
+    function sortPlayers() {
+
+      players.sort((a, b) => b.score - a.score);
+
+    }
+
+    function savePlayers() {
+
+      localStorage.setItem(
+        "bingoPlayers",
+        JSON.stringify(players)
+      );
+
+    }
+
+    function renderPlayers() {
+
+      const list =
+        document.getElementById("playerList");
+
+      sortPlayers();
+
+      list.innerHTML = "";
+
+      players.forEach((player, index) => {
+
+        const li = document.createElement("li");
+
+        li.classList.add("player-item");
+
+        li.innerHTML = `
+          <span class="player-rank">
+            #${index + 1} ${player.name}
+          </span>
+
+          <span class="player-score">
+            ${player.score}
+          </span>
+        `;
+
+        list.appendChild(li);
+
+      });
+    }
+
+    function resetScores() {
+
+      players = [];
+
+      localStorage.removeItem("bingoPlayers");
+
+      renderPlayers();
+
+    }
+
+    // INITIALIZE
+
+    renderPlayers();
+
+    createBoard();
+
+  </script>
+
 </body>
 </html>
